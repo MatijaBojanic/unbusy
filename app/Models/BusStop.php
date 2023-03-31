@@ -31,6 +31,7 @@ class BusStop extends Model
             'type' => 'Feature',
             'properties' => [
                 'name' => $this->name,
+                'id' => $this->id,
             ],
             'geometry' => [
                 'type' => 'Point',
