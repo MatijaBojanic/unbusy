@@ -19,3 +19,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('bus-lines/{busLine}', [\App\Http\Controllers\BusLineController::class, 'show']);
+
+Route::post('bus-lines', [\App\Http\Controllers\BusLineController::class, 'store']);
