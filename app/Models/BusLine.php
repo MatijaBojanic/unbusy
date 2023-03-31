@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use MatanYadaev\EloquentSpatial\Objects\LineString;
-use MatanYadaev\EloquentSpatial\Objects\Point;
 use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
 
 class BusLine extends Model
@@ -45,8 +44,12 @@ class BusLine extends Model
 
         $geoJson['features'][] = $busLineGeoJson;
 
-        foreach($this->busStops as $busStop) {
-            $geoJson['features'][] = $busStop->toGeoJson();
+        $busStops = $this->stops()
+            ->orderBy('bus_line_bus_stop.order')
+            ->get();
+
+        foreach($busStops as $busStop) {
+            $geoJson['features'][] = $busStop->toGeoJsonArray();
         }
 
         return $geoJson;
