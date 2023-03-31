@@ -31,10 +31,7 @@ class AuthenticationController extends Controller
 
     public function logout(Request $request)
     {
-        // delete all of this users keys
         $request->user()->tokens()->delete();
-
-        $request->user()->currentAccessToken()->delete();
 
         return response()->json([
             'message' => 'Logged out'
