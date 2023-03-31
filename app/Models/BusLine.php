@@ -24,7 +24,7 @@ class BusLine extends Model
         return $this->belongsToMany(BusStop::class, 'bus_line_bus_stop', 'bus_line_id', 'bus_stop_id');
     }
 
-    public function toGeoJsonArray()
+    public function toGeoJsonArray($withLineId = false)
     {
         $busLineGeoJson =  [
             'type' => 'Feature',
@@ -50,14 +50,30 @@ class BusLine extends Model
             ->get();
 
         foreach($busStops as $busStop) {
-            $geoJson['features'][] = $busStop->toGeoJsonArray();
+            $geoJson['features'][] = $busStop->toGeoJsonArray($this->id);
         }
 
         return $geoJson;
     }
 
-    public function toGeoJson()
+    public function toGeoJson($withLineId = false)
     {
-        return json_encode($this->toGeoJsonArray());
+        return json_encode($this->toGeoJsonArray($withLineId));
+    }
+
+    public static function collectionToGeoJsonArray($busLines)
+    {
+        $multipleFeatureCollections = $busLines->map(fn($busLine) => $busLine->toGeoJsonArray(true));
+
+        $geoJson = [
+            'type' => 'FeatureCollection',
+            'features' => [],
+        ];
+
+        foreach($multipleFeatureCollections as $featureCollection) {
+            $geoJson['features'] = array_merge($geoJson['features'], $featureCollection['features']);
+        }
+
+        return $geoJson;
     }
 }

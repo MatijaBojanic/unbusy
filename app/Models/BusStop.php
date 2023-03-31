@@ -25,9 +25,9 @@ class BusStop extends Model
         return $this->belongsToMany(BusLine::class, 'bus_line_bus_stop', 'bus_stop_id', 'bus_line_id');
     }
 
-    public function toGeoJsonArray()
+    public function toGeoJsonArray($lineId = null)
     {
-        return [
+        $busStopGeoJson =  [
             'type' => 'Feature',
             'properties' => [
                 'name' => $this->name,
@@ -38,6 +38,12 @@ class BusStop extends Model
                 'coordinates' => $this->location->getCoordinates(),
             ],
         ];
+
+        if($lineId) {
+            $busStopGeoJson['properties']['line_id'] = $lineId;
+        }
+
+        return $busStopGeoJson;
     }
 
     public function toGeoJson()

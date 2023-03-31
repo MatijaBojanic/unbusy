@@ -24,9 +24,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::post('bus-lines', [\App\Http\Controllers\BusLineController::class, 'store']);
 
+    Route::delete('bus-lines/{busLine}', [\App\Http\Controllers\BusLineController::class, 'destroy']);
 });
 
 Route::post('/login', [\App\Http\Controllers\AuthenticationController::class, 'login']);
 
 Route::get('bus-lines/{busLine}', [\App\Http\Controllers\BusLineController::class, 'show']);
 
+Route::get('bus-lines', [\App\Http\Controllers\BusLineController::class, 'index']);
