@@ -14,10 +14,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+    Route::post('/logout', [\App\Http\Controllers\AuthenticationController::class, 'logout']);
+
+    Route::post('bus-lines', [\App\Http\Controllers\BusLineController::class, 'store']);
+
 });
+
+Route::post('/login', [\App\Http\Controllers\AuthenticationController::class, 'login']);
 
 Route::get('bus-lines/{busLine}', [\App\Http\Controllers\BusLineController::class, 'show']);
 
-Route::post('bus-lines', [\App\Http\Controllers\BusLineController::class, 'store']);
