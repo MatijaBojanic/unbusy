@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use MatanYadaev\EloquentSpatial\Objects\LineString;
+use MatanYadaev\EloquentSpatial\Objects\Point;
 use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
 
 class BusLine extends Model
@@ -30,6 +31,7 @@ class BusLine extends Model
             'type' => 'Feature',
             'properties' => [
                 'name' => $this->name,
+                'type' => 'bus-line',
                 'id' => $this->id,
             ],
             'geometry' => [
@@ -75,5 +77,57 @@ class BusLine extends Model
         }
 
         return $geoJson;
+    }
+
+    public function saveToGeoJsonFile()
+    {
+        $geoJson = $this->toGeoJson();
+        $fileName = $this->name . '.json';
+        $filePath = storage_path('app/public/bus-lines/' . $fileName);
+        file_put_contents($filePath, $geoJson);
+    }
+
+    public static function fromGeoJson($features)
+    {
+        $pathwayCoordinates = collect($features)
+            ->firstWhere(fn($feature) => $feature['properties']['type'] === 'bus-line')['geometry']['coordinates'];
+
+        $pathwayPoints = collect();
+
+        foreach ($pathwayCoordinates as $pathwayCoordinate) {
+            $pathwayPoints->push(new Point($pathwayCoordinate[0], $pathwayCoordinate[1]));
+        }
+
+        $busLine = BusLine::create([
+            'name' => $features[0]['properties']['name'],
+            'pathway' => new LineString($pathwayPoints)
+        ]);
+
+        $busStops = collect($features)
+            ->filter(fn($feature) => $feature['properties']['type'] === 'bus-stop')
+            ->map(fn($feature) => [
+                'name' => $feature['properties']['name'],
+                'location' => new Point($feature['geometry']['coordinates'][0], $feature['geometry']['coordinates'][1]),
+            ])
+            ->toArray();
+
+        $toBeAttachedBusStops = [];
+        $busStopOrder = 1;
+
+        foreach ($busStops as $busStop) {
+            $newBusStop = BusStop::whereName($busStop['name'])->first();
+
+            if(!$newBusStop) {
+                $newBusStop = BusStop::create($busStop);
+            }
+
+            $toBeAttachedBusStops[$newBusStop->id] = ['order' => $busStopOrder];
+
+            $busStopOrder++;
+        }
+
+        $busLine->stops()->attach($toBeAttachedBusStops);
+
+        return $busLine;
     }
 }

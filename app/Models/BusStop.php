@@ -32,6 +32,7 @@ class BusStop extends Model
             'properties' => [
                 'name' => $this->name,
                 'id' => $this->id,
+                'type' => 'bus-stop'
             ],
             'geometry' => [
                 'type' => 'Point',
@@ -49,5 +50,10 @@ class BusStop extends Model
     public function toGeoJson()
     {
         return json_encode($this->toGeoJsonArray());
+    }
+
+    public function busStopsWithMultipleLines()
+    {
+        return $this->lines()->count() > 1;
     }
 }
