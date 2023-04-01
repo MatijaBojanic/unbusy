@@ -15,26 +15,28 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::group(['middleware' => 'auth:sanctum'], function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
+Route::group(['prefix' => 'v1'], function () {
+    Route::group(['middleware' => 'auth:sanctum'], function () {
+        Route::get('/user', function (Request $request) {
+            return $request->user();
+        });
+
+        Route::post('/logout', [\App\Http\Controllers\AuthenticationController::class, 'logout']);
+
+        Route::post('bus-lines', [\App\Http\Controllers\BusLineController::class, 'store']);
+        Route::delete('bus-lines/{busLine}', [\App\Http\Controllers\BusLineController::class, 'destroy']);
+
+        Route::delete('bus-stops/{busStop}', [\App\Http\Controllers\BusStopController::class, 'destroy']);
     });
 
-    Route::post('/logout', [\App\Http\Controllers\AuthenticationController::class, 'logout']);
+    Route::post('/login', [\App\Http\Controllers\AuthenticationController::class, 'login']);
 
-    Route::post('bus-lines', [\App\Http\Controllers\BusLineController::class, 'store']);
-    Route::delete('bus-lines/{busLine}', [\App\Http\Controllers\BusLineController::class, 'destroy']);
+    Route::get('bus-lines/{busLine}', [\App\Http\Controllers\BusLineController::class, 'show']);
+    Route::get('bus-lines', [\App\Http\Controllers\BusLineController::class, 'index']);
 
-    Route::delete('bus-stops/{busStop}', [\App\Http\Controllers\BusStopController::class, 'destroy']);
+    Route::get('bus-lines/{busLine}/schedule', [\App\Http\Controllers\BusScheduleController::class, 'index']);
+
+
+    Route::get('bus-stops', [\App\Http\Controllers\BusStopController::class, 'index']);
+    Route::get('bus-stops/{busStop}', [\App\Http\Controllers\BusStopController::class, 'show']);
 });
-
-Route::post('/login', [\App\Http\Controllers\AuthenticationController::class, 'login']);
-
-Route::get('bus-lines/{busLine}', [\App\Http\Controllers\BusLineController::class, 'show']);
-Route::get('bus-lines', [\App\Http\Controllers\BusLineController::class, 'index']);
-
-Route::get('bus-lines/{busLine}/schedule', [\App\Http\Controllers\BusScheduleController::class, 'index']);
-
-
-Route::get('bus-stops', [\App\Http\Controllers\BusStopController::class, 'index']);
-Route::get('bus-stops/{busStop}', [\App\Http\Controllers\BusStopController::class, 'show']);
