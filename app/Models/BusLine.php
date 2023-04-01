@@ -25,6 +25,11 @@ class BusLine extends Model
         return $this->belongsToMany(BusStop::class, 'bus_line_bus_stop', 'bus_line_id', 'bus_stop_id');
     }
 
+    public function schedule()
+    {
+        return $this->hasMany(BusSchedule::class);
+    }
+
     public function toGeoJsonArrayWithoutStops()
     {
         $busLineGeoJson =  [

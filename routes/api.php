@@ -33,5 +33,8 @@ Route::post('/login', [\App\Http\Controllers\AuthenticationController::class, 'l
 Route::get('bus-lines/{busLine}', [\App\Http\Controllers\BusLineController::class, 'show']);
 Route::get('bus-lines', [\App\Http\Controllers\BusLineController::class, 'index']);
 
+Route::get('bus-lines/{busLine}/schedule', [\App\Http\Controllers\BusScheduleController::class, 'index']);
+
+
 Route::get('bus-stops', [\App\Http\Controllers\BusStopController::class, 'index']);
 Route::get('bus-stops/{busStop}', [\App\Http\Controllers\BusStopController::class, 'show']);
