@@ -22,8 +22,7 @@
            -v "$(pwd):/var/www/html" \  
            -w /var/www/html \  
            laravelsail/php82-composer:latest \  
-           composer install --ignore-platform-reqs  
-- 
+           composer install --ignore-platform-reqs
 - Get the containers up and running:
 
     `./vendor/bin/sail up`
