@@ -25,7 +25,7 @@ class BusLine extends Model
         return $this->belongsToMany(BusStop::class, 'bus_line_bus_stop', 'bus_line_id', 'bus_stop_id');
     }
 
-    public function toGeoJsonArray($withLineId = false)
+    public function toGeoJsonArrayWithoutStops()
     {
         $busLineGeoJson =  [
             'type' => 'Feature',
@@ -46,6 +46,13 @@ class BusLine extends Model
         ];
 
         $geoJson['features'][] = $busLineGeoJson;
+
+        return $geoJson;
+    }
+
+    public function toGeoJsonArray($withLineId = false)
+    {
+        $geoJson = $this->toGeoJsonArrayWithoutStops();
 
         $busStops = $this->stops()
             ->orderBy('bus_line_bus_stop.order')

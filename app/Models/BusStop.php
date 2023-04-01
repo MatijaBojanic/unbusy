@@ -47,13 +47,38 @@ class BusStop extends Model
         return $busStopGeoJson;
     }
 
+    public function toGeoJsonArrayWithLines()
+    {
+        $geoJson = [
+            'type' => 'FeatureCollection',
+            'features' => [],
+        ];
+
+        $geoJson['features'][] = $this->toGeoJsonArray();
+
+        foreach($this->lines as $busLine) {
+            $geoJson['features'][] = $busLine->toGeoJsonArrayWithoutStops();
+        }
+
+        return $geoJson;
+    }
+
     public function toGeoJson()
     {
         return json_encode($this->toGeoJsonArray());
     }
 
-    public function busStopsWithMultipleLines()
+    public static function collectionToGeoJsonArray($busStops)
     {
-        return $this->lines()->count() > 1;
+        $geoJson = [
+            'type' => 'FeatureCollection',
+            'features' => [],
+        ];
+
+        foreach($busStops as $busStop) {
+            $geoJson['features'][] = $busStop->toGeoJsonArray();
+        }
+
+        return $geoJson;
     }
 }
