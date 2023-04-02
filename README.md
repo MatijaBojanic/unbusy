@@ -32,3 +32,6 @@
 - Create a super user
     
     `./vendor/bin/sail artisan create:super-user {your email} {your password}`
+
+## Documentation
+All the projects routes are documented on the **api/documentation** page.
