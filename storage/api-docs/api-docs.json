@@ -119,43 +119,6 @@
                 ]
             }
         },
-        "/bus-lines/{busLine}": {
-            "get": {
-                "tags": [
-                    "Bus Lines"
-                ],
-                "summary": "Get bus line by ID",
-                "description": "Returns a single bus line object identified by its ID",
-                "operationId": "getBusLineById",
-                "parameters": [
-                    {
-                        "name": "busLine",
-                        "in": "path",
-                        "description": "ID of the bus line to retrieve",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/BusLine"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Bus line not found"
-                    }
-                }
-            }
-        },
         "/bus-lines": {
             "get": {
                 "tags": [
@@ -233,6 +196,43 @@
                 ]
             }
         },
+        "/bus-lines/{busLine}": {
+            "get": {
+                "tags": [
+                    "Bus Lines"
+                ],
+                "summary": "Get bus line by ID",
+                "description": "Returns a single bus line object identified by its ID",
+                "operationId": "getBusLineById",
+                "parameters": [
+                    {
+                        "name": "busLine",
+                        "in": "path",
+                        "description": "ID of the bus line to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BusLine"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Bus line not found"
+                    }
+                }
+            }
+        },
         "/api/bus-lines/{busLine}": {
             "delete": {
                 "tags": [
@@ -277,6 +277,43 @@
                         "sanctum": []
                     }
                 ]
+            }
+        },
+        "/bus-lines/{busLine}/schedule": {
+            "get": {
+                "tags": [
+                    "Bus Lines"
+                ],
+                "summary": "Get bus line schedule",
+                "description": "Returns a single bus line schedule object identified by its ID",
+                "operationId": "getBusLineSchedule",
+                "parameters": [
+                    {
+                        "name": "busLine",
+                        "in": "path",
+                        "description": "ID of the bus line to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BusSchedule"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Bus line not found"
+                    }
+                }
             }
         },
         "/bus-stops": {
@@ -636,6 +673,54 @@
                                 19.28015506
                             ]
                         }
+                    }
+                ]
+            },
+            "BusSchedule": {
+                "title": "Bus Schedule",
+                "description": "Bus Schedule for a specific bus line",
+                "type": "array",
+                "items": {
+                    "properties": {
+                        "departure_time": {
+                            "type": "string",
+                            "format": "time",
+                            "example": "05:15:00"
+                        },
+                        "direction_name": {
+                            "type": "string",
+                            "example": "Stari Aerodrom"
+                        },
+                        "day_type": {
+                            "type": "string",
+                            "enum": [
+                                "weekday",
+                                "saturday_and_holiday",
+                                "sunday"
+                            ],
+                            "example": "weekday"
+                        }
+                    },
+                    "type": "object"
+                },
+                "xml": {
+                    "name": "BusSchedule"
+                },
+                "example": [
+                    {
+                        "departure_time": "05:15:00",
+                        "direction_name": "Stari Aerodrom",
+                        "day_type": "weekday"
+                    },
+                    {
+                        "departure_time": "06:35:00",
+                        "direction_name": "Stari Aerodrom",
+                        "day_type": "weekday"
+                    },
+                    {
+                        "departure_time": "07:15:00",
+                        "direction_name": "Stari Aerodrom",
+                        "day_type": "weekday"
                     }
                 ]
             },

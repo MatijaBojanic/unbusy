@@ -13,6 +13,27 @@ class BusLineController extends Controller
 {
     /**
      * @OA\Get(
+     *      path="/bus-lines",
+     *      operationId="getBusLinesList",
+     *      tags={"Bus Lines"},
+     *      summary="Get collection of bus lines",
+     *      description="Returns a collection of bus lines",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/BusLineCollection")
+     *       )
+     *     )
+     */
+    public function index(Request $request)
+    {
+        $busLines = BusLine::all();
+
+        return response()->json(BusLine::collectionToGeoJsonArray($busLines));
+    }
+
+    /**
+     * @OA\Get(
      *     path="/bus-lines/{busLine}",
      *     operationId="getBusLineById",
      *     summary="Get bus line by ID",
@@ -41,27 +62,6 @@ class BusLineController extends Controller
     public function show(Request $request, BusLine $busLine)
     {
         return response()->json($busLine->toGeoJsonArray());
-    }
-
-    /**
-     * @OA\Get(
-     *      path="/bus-lines",
-     *      operationId="getBusLinesList",
-     *      tags={"Bus Lines"},
-     *      summary="Get collection of bus lines",
-     *      description="Returns a collection of bus lines",
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent(ref="#/components/schemas/BusLineCollection")
-     *       )
-     *     )
-     */
-    public function index(Request $request)
-    {
-        $busLines = BusLine::all();
-
-        return response()->json(BusLine::collectionToGeoJsonArray($busLines));
     }
 
     /**
