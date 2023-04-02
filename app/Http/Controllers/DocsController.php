@@ -5,26 +5,13 @@ namespace App\Http\Controllers;
 /**
  * @OA\Info(
  *      version="1.0.0",
- *      title="Laravel OpenApi Demo Documentation",
- *      description="L5 Swagger OpenApi description",
- *      @OA\Contact(
- *          email="admin@admin.com"
- *      ),
- *      @OA\License(
- *          name="Apache 2.0",
- *          url="http://www.apache.org/licenses/LICENSE-2.0.html"
- *      )
+ *      title="UnBusy OpenApi Documentation",
+ *      description="UnBusy is a small public transport application",
  * )
  *
  * @OA\Server(
  *      url=L5_SWAGGER_CONST_HOST,
- *      description="Demo API Server"
- * )
-
- *
- * @OA\Tag(
- *     name="Projects",
- *     description="API Endpoints of Projects"
+ *      description="UnBusy API Server"
  * )
  */
 class DocsController extends Controller

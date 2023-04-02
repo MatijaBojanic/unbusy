@@ -12,11 +12,31 @@ use MatanYadaev\EloquentSpatial\Objects\Point;
 class BusLineController extends Controller
 {
     /**
-     * Returns the Bus line and its bus stops in the GeoJSON format
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\BusLine  $busLine
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *     path="/bus-lines/{busLine}",
+     *     operationId="getBusLineById",
+     *     summary="Get bus line by ID",
+     *     description="Returns a single bus line object identified by its ID",
+     *     tags={"Bus Lines"},
+     *     @OA\Parameter(
+     *         name="busLine",
+     *         in="path",
+     *         description="ID of the bus line to retrieve",
+     *         required=true,
+     *         @OA\Schema(type="integer", format="int64")
+     *     ),
+     * @OA\Response(
+     *         response="200",
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *                 ref="#/components/schemas/BusLine"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Bus line not found"
+     *     )
+     * )
      */
     public function show(Request $request, BusLine $busLine)
     {
@@ -27,22 +47,14 @@ class BusLineController extends Controller
      * @OA\Get(
      *      path="/bus-lines",
      *      operationId="getBusLinesList",
-     *      tags={"BusLine"},
+     *      tags={"Bus Lines"},
      *      summary="Get collection of bus lines",
      *      description="Returns a collection of bus lines",
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
-     *          @OA\JsonContent(ref="#/components/schemas/BusLineResource")
-     *       ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthenticated",
-     *      ),
-     *      @OA\Response(
-     *          response=403,
-     *          description="Forbidden"
-     *      )
+     *          @OA\JsonContent(ref="#/components/schemas/BusLineCollection")
+     *       )
      *     )
      */
     public function index(Request $request)
@@ -53,10 +65,27 @@ class BusLineController extends Controller
     }
 
     /**
-     * Create a Bus Line and its stops from a GeoJson request
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @OA\Post(
+     *      path="/bus-lines",
+     *      operationId="storeBusLine",
+     *      tags={"Bus Lines"},
+     *      summary="Store new bus line",
+     *      description="Returns the newly created bus line",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/BusLineCreate")
+     *      ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/BusLine")
+     *       ),
+     *      @OA\Response(
+     *          response="422",
+     *          description="Unprocessable Entity",
+     *          @OA\JsonContent(ref="#/components/schemas/ValidationError")
+     *      )
+     * )
      */
     public function store(Request $request)
     {
@@ -74,7 +103,7 @@ class BusLineController extends Controller
 
         $busLine = BusLine::fromGeoJson($request->get('features'));
 
-        return response()->json($busLine->toGeoJsonArray());
+        return response()->json($busLine->toGeoJsonArray(), 201);
     }
 
     /**
