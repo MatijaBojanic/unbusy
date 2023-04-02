@@ -6,14 +6,77 @@ namespace App\Documentation\Models;
  * @OA\Schema(
  *     schema="BusStop",
  *     type="object",
- *     @OA\Property(property="name", type="string", example="Tržni centar (A)"),
- *     @OA\Property(property="id", type="integer", example=336),
- *     @OA\Property(property="type", type="string", example="bus-stop"),
- *     @OA\Property(property="line_id", type="integer", example=29),
- *     @OA\Property(property="geometry", type="object",
- *         @OA\Property(property="type", type="string", example="Point"),
- *         @OA\Property(property="coordinates", type="array", @OA\Items(type="number", example={42.43146669, 19.27915313}))
- *     )
+ *     title="Bus Line",
+ *     description="Bus Stop and all of its lines in GeoJSON format",
+ *     @OA\Xml(
+ *         name="BusStop"
+ *     ),
+ *     @OA\Property(
+ *          property="type",
+ *          type="string",
+ *          example="FeatureCollection",
+ *     ),
+ *     @OA\Property(
+ *          property="features",
+ *          type="array",
+ *          @OA\Items(
+ *              oneOf={
+ *                  @OA\Schema(ref="#/components/schemas/BusStopFeatureWithoutLineId"),
+ *                  @OA\Schema(ref="#/components/schemas/BusLineFeature"),
+ *              }
+ *          ),
+ *      ),
+ *      example={
+ *          {
+ *              "type": "Feature",
+ *              "properties": {
+ *                  "name": "Tržni centar (A)",
+ *                  "id": 336,
+ *                  "type": "bus-stop"
+ *              },
+ *              "geometry": {
+ *                  "type": "Point",
+ *                  "coordinates": {
+ *                      42.43146669,
+ *                      19.27915313
+ *                  }
+ *              }
+ *          },
+ *          {
+ *              "type": "Feature",
+ *              "properties": {
+ *                  "name": "Stari aerodrom - Donja gorica",
+ *                  "type": "bus-line",
+ *                  "id": 29
+ *              },
+ *              "geometry": {
+ *                  "type": "LineString",
+ *                  "coordinates": {
+ *                      {19.27913681, 42.43142816},
+ *                      {19.27913681, 42.43142816},
+ *                      {19.27913681, 42.43142816},
+ *                      {19.27913681, 42.43142816}
+ *                  }
+ *              }
+ *          },
+ *          {
+ *              "type": "Feature",
+ *              "properties": {
+ *                  "name": "Donja gorica - Rogami ",
+ *                  "type": "bus-line",
+ *                  "id": 30
+ *              },
+ *              "geometry": {
+ *                  "type": "LineString",
+ *                  "coordinates": {
+ *                      {19.27913681, 42.43142816},
+ *                      {19.27913681, 42.43142816},
+ *                      {19.27913681, 42.43142816},
+ *                      {19.27913681, 42.43142816}
+ *                  }
+ *              }
+ *          },
+ *      }
  * )
  */
 class BusStop

@@ -7,7 +7,7 @@ namespace App\Documentation\Models;
  *     schema="BusLine",
  *     type="object",
  *     title="Bus Line",
- *     description="Bus Line model in GeoJSON format",
+ *     description="Bus Line and all of its stops in GeoJSON format",
  *     @OA\Xml(
  *         name="BusLine"
  *     ),

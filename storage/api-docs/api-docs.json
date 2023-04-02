@@ -278,13 +278,72 @@
                     }
                 ]
             }
+        },
+        "/bus-stops": {
+            "get": {
+                "tags": [
+                    "Bus Stops"
+                ],
+                "summary": "Get collection of bus stops",
+                "description": "Returns a collection of bus stops",
+                "operationId": "getBusStopsList",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BusStopCollection"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/bus-stops/{busStop}": {
+            "get": {
+                "tags": [
+                    "Bus Stops"
+                ],
+                "summary": "Get bus stop by ID",
+                "description": "Returns a single bus stop object identified by its ID",
+                "operationId": "getBusStopById",
+                "parameters": [
+                    {
+                        "name": "busStop",
+                        "in": "path",
+                        "description": "ID of the bus stop to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BusStop"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Bus line not found"
+                    }
+                }
+            }
         }
     },
     "components": {
         "schemas": {
             "BusLine": {
                 "title": "Bus Line",
-                "description": "Bus Line model in GeoJSON format",
+                "description": "Bus Line and all of its stops in GeoJSON format",
                 "properties": {
                     "type": {
                         "type": "string",
@@ -581,44 +640,172 @@
                 ]
             },
             "BusStop": {
+                "title": "Bus Line",
+                "description": "Bus Stop and all of its lines in GeoJSON format",
                 "properties": {
-                    "name": {
-                        "type": "string",
-                        "example": "Tržni centar (A)"
-                    },
-                    "id": {
-                        "type": "integer",
-                        "example": 336
-                    },
                     "type": {
                         "type": "string",
-                        "example": "bus-stop"
+                        "example": "FeatureCollection"
                     },
-                    "line_id": {
-                        "type": "integer",
-                        "example": 29
-                    },
-                    "geometry": {
-                        "properties": {
-                            "type": {
-                                "type": "string",
-                                "example": "Point"
-                            },
-                            "coordinates": {
-                                "type": "array",
-                                "items": {
-                                    "type": "number",
-                                    "example": [
-                                        42.43146669,
-                                        19.27915313
-                                    ]
+                    "features": {
+                        "type": "array",
+                        "items": {
+                            "oneOf": [
+                                {
+                                    "$ref": "#/components/schemas/BusStopFeatureWithoutLineId"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/BusLineFeature"
                                 }
-                            }
-                        },
-                        "type": "object"
+                            ]
+                        }
                     }
                 },
-                "type": "object"
+                "type": "object",
+                "xml": {
+                    "name": "BusStop"
+                },
+                "example": [
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "name": "Tržni centar (A)",
+                            "id": 336,
+                            "type": "bus-stop"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                42.43146669,
+                                19.27915313
+                            ]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "name": "Stari aerodrom - Donja gorica",
+                            "type": "bus-line",
+                            "id": 29
+                        },
+                        "geometry": {
+                            "type": "LineString",
+                            "coordinates": [
+                                [
+                                    19.27913681,
+                                    42.43142816
+                                ],
+                                [
+                                    19.27913681,
+                                    42.43142816
+                                ],
+                                [
+                                    19.27913681,
+                                    42.43142816
+                                ],
+                                [
+                                    19.27913681,
+                                    42.43142816
+                                ]
+                            ]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "name": "Donja gorica - Rogami ",
+                            "type": "bus-line",
+                            "id": 30
+                        },
+                        "geometry": {
+                            "type": "LineString",
+                            "coordinates": [
+                                [
+                                    19.27913681,
+                                    42.43142816
+                                ],
+                                [
+                                    19.27913681,
+                                    42.43142816
+                                ],
+                                [
+                                    19.27913681,
+                                    42.43142816
+                                ],
+                                [
+                                    19.27913681,
+                                    42.43142816
+                                ]
+                            ]
+                        }
+                    }
+                ]
+            },
+            "BusStopCollection": {
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "example": "FeatureCollection"
+                    },
+                    "features": {
+                        "type": "array",
+                        "items": {
+                            "oneOf": [
+                                {
+                                    "$ref": "#/components/schemas/BusStopFeatureWithoutLineId"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "type": "object",
+                "example": [
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "name": "Tržni centar (A)",
+                            "id": 336,
+                            "type": "bus-stop"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                42.43146669,
+                                19.27915313
+                            ]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "name": "Donja Gorica (A)",
+                            "id": 337,
+                            "type": "bus-stop"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                42.43133438,
+                                19.28015506
+                            ]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "name": "Donja Gorica (A)",
+                            "id": 337,
+                            "type": "bus-stop"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                42.43133438,
+                                19.28015506
+                            ]
+                        }
+                    }
+                ]
             },
             "BusLineCreateFeature": {
                 "properties": {

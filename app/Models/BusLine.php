@@ -32,7 +32,7 @@ class BusLine extends Model
 
     public function toGeoJsonArrayWithoutStops()
     {
-        $busLineGeoJson =  [
+        return [
             'type' => 'Feature',
             'properties' => [
                 'name' => $this->name,
@@ -44,20 +44,16 @@ class BusLine extends Model
                 'coordinates' => $this->pathway->getCoordinates(),
             ],
         ];
+    }
 
+    public function toGeoJsonArray($withLineId = false)
+    {
         $geoJson = [
             'type' => 'FeatureCollection',
             'features' => [],
         ];
 
-        $geoJson['features'][] = $busLineGeoJson;
-
-        return $geoJson;
-    }
-
-    public function toGeoJsonArray($withLineId = false)
-    {
-        $geoJson = $this->toGeoJsonArrayWithoutStops();
+        $geoJson['features'][] = $this->toGeoJsonArrayWithoutStops();
 
         $busStops = $this->stops()
             ->orderBy('bus_line_bus_stop.order')
