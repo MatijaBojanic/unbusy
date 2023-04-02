@@ -24,10 +24,26 @@ class BusLineController extends Controller
     }
 
     /**
-     * Returns all the Bus lines and their bus stops in the GeoJSON format
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @OA\Get(
+     *      path="/bus-lines",
+     *      operationId="getBusLinesList",
+     *      tags={"BusLine"},
+     *      summary="Get collection of bus lines",
+     *      description="Returns a collection of bus lines",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/BusLineResource")
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     *     )
      */
     public function index(Request $request)
     {
