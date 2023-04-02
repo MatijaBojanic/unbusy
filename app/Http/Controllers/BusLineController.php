@@ -71,6 +71,7 @@ class BusLineController extends Controller
      *      tags={"Bus Lines"},
      *      summary="Store new bus line",
      *      description="Returns the newly created bus line",
+     *      security={{"sanctum": {}}},
      *      @OA\RequestBody(
      *          required=true,
      *          @OA\JsonContent(ref="#/components/schemas/BusLineCreate")
@@ -80,6 +81,11 @@ class BusLineController extends Controller
      *          description="Successful operation",
      *          @OA\JsonContent(ref="#/components/schemas/BusLine")
      *       ),
+     *      @OA\Response(
+     *          response="401",
+     *          description="Unauthorized",
+     *          @OA\JsonContent(ref="#/components/schemas/UnauthenticatedError")
+     *      ),
      *      @OA\Response(
      *          response="422",
      *          description="Unprocessable Entity",
@@ -107,19 +113,45 @@ class BusLineController extends Controller
     }
 
     /**
-     * Detach all the stops from the Bus Line and delete it
-     *
-     * @param Request $request
-     * @param BusLine $busLine
-     * @return \Illuminate\Http\JsonResponse
+     * @OA\Delete(
+     *     path="/api/bus-lines/{busLine}",
+     *     summary="Delete a bus line",
+     *     description="Delete a specific bus line by its ID",
+     *     operationId="deleteBusLine",
+     *     tags={"Bus Lines"},
+     *     security={{"sanctum": {}}},
+     *     @OA\Parameter(
+     *         name="busLine",
+     *         in="path",
+     *         description="ID of the bus line to delete",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64",
+     *             example=1
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="204",
+     *         description="Bus line deleted successfully",
+     *     ),
+     *     @OA\Response(
+     *          response="401",
+     *          description="Unauthorized",
+     *          @OA\JsonContent(ref="#/components/schemas/UnauthenticatedError")
+     *      ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Bus line not found"
+     *     ),
+     * )
      */
     public function destroy(Request $request, BusLine $busLine)
     {
         $busLine->stops()->detach();
         $busLine->delete();
 
-        return response()->json([
-            'message' => 'Bus line deleted'
-        ]);
+        //respond with 204
+        return response()->json(null, 204);
     }
 }
