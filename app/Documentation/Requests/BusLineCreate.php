@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Documentation\Models;
+namespace App\Documentation\Requests;
 
 /**
  * @OA\Schema(

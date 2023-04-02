@@ -11,6 +11,12 @@ class BusSchedule extends Model
     public const DAY_TYPE_SATURDAY_AND_HOLIDAYS = 'saturday_and_holidays';
     public const DAY_TYPE_SUNDAY = 'sunday';
 
+    public const DAY_TYPES = [
+        self::DAY_TYPE_WEEKDAY,
+        self::DAY_TYPE_SATURDAY_AND_HOLIDAYS,
+        self::DAY_TYPE_SUNDAY,
+    ];
+
     protected $fillable = [
         'departure_time',
         'bus_line_id',

@@ -316,6 +316,155 @@
                 }
             }
         },
+        "/bus-lines/{busLine}/schedules": {
+            "post": {
+                "tags": [
+                    "Bus Lines"
+                ],
+                "summary": "Create bus line schedule",
+                "description": "Create a new schedule for a bus line",
+                "operationId": "a7fad069493382bb15dd4ec2c02d2eb6",
+                "parameters": [
+                    {
+                        "name": "busLine",
+                        "in": "path",
+                        "description": "ID of the bus line",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "first_departure_time": {
+                                        "description": "The first departure time in format HH:mm:ss",
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "05:15:00"
+                                    },
+                                    "last_departure_time": {
+                                        "description": "The last departure time in format HH:mm:ss",
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "22:15:00"
+                                    },
+                                    "interval_in_minutes": {
+                                        "description": "The interval in minutes between departures",
+                                        "type": "integer",
+                                        "example": 60
+                                    },
+                                    "direction_name": {
+                                        "description": "The name of the direction for the schedule",
+                                        "type": "string",
+                                        "example": "Stari Aerodrom"
+                                    },
+                                    "day_type": {
+                                        "description": "The day type for the schedule",
+                                        "type": "string",
+                                        "enum": [
+                                            "weekday",
+                                            "saturday_and_holiday",
+                                            "sunday"
+                                        ],
+                                        "example": "weekday"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BusSchedule"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthenticatedError"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/bus-lines/{busLine}/schedule": {
+            "delete": {
+                "tags": [
+                    "Bus Lines"
+                ],
+                "summary": "Delete a bus line schedule",
+                "description": "Delete a specific bus line's schedule",
+                "operationId": "deleteBusLineSchedule",
+                "parameters": [
+                    {
+                        "name": "busLine",
+                        "in": "path",
+                        "description": "ID of the bus line whose schedule to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Bus line schedule deleted successfully"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthenticatedError"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Bus line not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/bus-stops": {
             "get": {
                 "tags": [
@@ -585,86 +734,6 @@
                             "id": 337,
                             "type": "bus-stop",
                             "line_id": 30
-                        },
-                        "geometry": {
-                            "type": "Point",
-                            "coordinates": [
-                                42.43133438,
-                                19.28015506
-                            ]
-                        }
-                    }
-                ]
-            },
-            "BusLineCreate": {
-                "properties": {
-                    "type": {
-                        "type": "string",
-                        "example": "FeatureCollection"
-                    },
-                    "features": {
-                        "type": "array",
-                        "items": {
-                            "oneOf": [
-                                {
-                                    "$ref": "#/components/schemas/BusLineCreateFeature"
-                                },
-                                {
-                                    "$ref": "#/components/schemas/BusStopCreateFeature"
-                                }
-                            ]
-                        }
-                    }
-                },
-                "type": "object",
-                "example": [
-                    {
-                        "type": "Feature",
-                        "properties": {
-                            "name": "Stari aerodrom - Donja gorica",
-                            "type": "bus-line"
-                        },
-                        "geometry": {
-                            "type": "LineString",
-                            "coordinates": [
-                                [
-                                    19.27913681,
-                                    42.43142816
-                                ],
-                                [
-                                    19.27913681,
-                                    42.43142816
-                                ],
-                                [
-                                    19.27913681,
-                                    42.43142816
-                                ],
-                                [
-                                    19.27913681,
-                                    42.43142816
-                                ]
-                            ]
-                        }
-                    },
-                    {
-                        "type": "Feature",
-                        "properties": {
-                            "name": "Tržni centar (A)",
-                            "type": "bus-stop"
-                        },
-                        "geometry": {
-                            "type": "Point",
-                            "coordinates": [
-                                42.43146669,
-                                19.27915313
-                            ]
-                        }
-                    },
-                    {
-                        "type": "Feature",
-                        "properties": {
-                            "name": "Donja Gorica (A)",
-                            "type": "bus-stop"
                         },
                         "geometry": {
                             "type": "Point",
@@ -1175,6 +1244,86 @@
                     }
                 },
                 "type": "object"
+            },
+            "BusLineCreate": {
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "example": "FeatureCollection"
+                    },
+                    "features": {
+                        "type": "array",
+                        "items": {
+                            "oneOf": [
+                                {
+                                    "$ref": "#/components/schemas/BusLineCreateFeature"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/BusStopCreateFeature"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "type": "object",
+                "example": [
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "name": "Stari aerodrom - Donja gorica",
+                            "type": "bus-line"
+                        },
+                        "geometry": {
+                            "type": "LineString",
+                            "coordinates": [
+                                [
+                                    19.27913681,
+                                    42.43142816
+                                ],
+                                [
+                                    19.27913681,
+                                    42.43142816
+                                ],
+                                [
+                                    19.27913681,
+                                    42.43142816
+                                ],
+                                [
+                                    19.27913681,
+                                    42.43142816
+                                ]
+                            ]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "name": "Tržni centar (A)",
+                            "type": "bus-stop"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                42.43146669,
+                                19.27915313
+                            ]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "name": "Donja Gorica (A)",
+                            "type": "bus-stop"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                42.43133438,
+                                19.28015506
+                            ]
+                        }
+                    }
+                ]
             },
             "UnauthenticatedError": {
                 "properties": {
