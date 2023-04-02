@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use MatanYadaev\EloquentSpatial\Objects\LineString;
 use MatanYadaev\EloquentSpatial\Objects\Point;
@@ -9,7 +10,8 @@ use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
 
 class BusLine extends Model
 {
-    use HasSpatial;
+    use HasSpatial,
+        HasFactory;
 
     protected $fillable = [
         'name',
