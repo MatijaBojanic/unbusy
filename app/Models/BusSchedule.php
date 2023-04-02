@@ -29,11 +29,6 @@ class BusSchedule extends Model
         return $this->belongsTo(BusLine::class);
     }
 
-    public function startingStop()
-    {
-        return $this->belongsTo(BusStop::class, 'bus_stop_id');
-    }
-
     public static function populateBusLineSchedule(BusLine $busLine, String $directionName, String $dayType, String $firstDepartureTime , int $intervalInMinutes, String $lastDepartureTime)
     {
         $departureTime = Carbon::parse($firstDepartureTime);
