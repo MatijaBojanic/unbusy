@@ -223,6 +223,9 @@
                     }
                 ],
                 "responses": {
+                    "204": {
+                        "description": "Bus deleted successfully"
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {

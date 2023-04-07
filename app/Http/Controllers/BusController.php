@@ -90,6 +90,10 @@ class BusController extends Controller
      *             format="int64"
      *         )
      *     ),
+     *     @OA\Response(
+     *         response="204",
+     *         description="Bus deleted successfully",
+     *     ),
      *      @OA\Response(
      *          response="401",
      *          description="Unauthorized",
