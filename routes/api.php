@@ -27,6 +27,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::delete('bus-lines/{busLine}', [\App\Http\Controllers\BusLineController::class, 'destroy']);
         Route::post('bus-lines/{busLine}/schedule', [\App\Http\Controllers\BusScheduleController::class, 'store']);
         Route::delete('bus-lines/{busLine}/schedule', [\App\Http\Controllers\BusScheduleController::class, 'destroy']);
+        Route::post('bus-lines/{busLine}/update-location', [\App\Http\Controllers\BusLineController::class, 'updateLocation']);
 
         Route::delete('bus-stops/{busStop}', [\App\Http\Controllers\BusStopController::class, 'destroy']);
     });

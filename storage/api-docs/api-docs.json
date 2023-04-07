@@ -279,6 +279,84 @@
                 ]
             }
         },
+        "/api/bus-lines/{busLine}/update-location": {
+            "post": {
+                "tags": [
+                    "Bus Lines"
+                ],
+                "summary": "Updates the current location of a specific bus",
+                "description": "Updates the current location of a specific bus",
+                "operationId": "updateBusLocation",
+                "parameters": [
+                    {
+                        "name": "busLine",
+                        "in": "path",
+                        "description": "ID of the bus line",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "The bus_id, longitude and latitude of the update",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "bus_id",
+                                    "longitude",
+                                    "latitude"
+                                ],
+                                "properties": {
+                                    "bus_id": {
+                                        "type": "integer",
+                                        "example": 123
+                                    },
+                                    "longitude": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": -122.4194
+                                    },
+                                    "latitude": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 37.7749
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Bus line location updated successfully, busLocationUpdateEvent dispatched"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthenticatedError"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Bus line not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/bus-lines/{busLine}/schedule": {
             "get": {
                 "tags": [
