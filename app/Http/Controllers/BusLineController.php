@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BusLocationUpdateEvent;
 use App\Models\BusLine;
 use App\Models\BusStop;
 use Illuminate\Http\Request;
@@ -152,6 +153,64 @@ class BusLineController extends Controller
         $busLine->delete();
 
         //respond with 204
+        return response()->json(null, 204);
+    }
+
+
+    /**
+     * @OA\Post(
+     *     path="/api/bus-lines/{busLine}/update-location",
+     *     summary="Updates the current location of a specific bus",
+     *     description="Updates the current location of a specific bus",
+     *     operationId="updateBusLocation",
+     *     tags={"Bus Lines"},
+     *     security={{"sanctum": {}}},
+     *     @OA\Parameter(
+     *         name="busLine",
+     *         in="path",
+     *         description="ID of the bus line",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64",
+     *             example=1
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         description="The bus_id, longitude and latitude of the update",
+     *         required=true,
+     *         @OA\JsonContent(
+     *              required={"bus_id", "longitude", "latitude"},
+     *              @OA\Property(property="bus_id", type="integer", example=123),
+     *              @OA\Property(property="longitude", type="number", format="float", example=-122.4194),
+     *              @OA\Property(property="latitude", type="number", format="float", example=37.7749)
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="204",
+     *         description="Bus line location updated successfully, busLocationUpdateEvent dispatched",
+     *     ),
+     *     @OA\Response(
+     *          response="401",
+     *          description="Unauthorized",
+     *          @OA\JsonContent(ref="#/components/schemas/UnauthenticatedError")
+     *      ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Bus line not found"
+     *     ),
+     * )
+     */
+    public function updateLocation(Request $request, BusLine $busLine)
+    {
+        $this->validate($request, [
+            'longitude' => 'required|numeric',
+            'latitude' => 'required|numeric',
+            'bus_id' => 'required|integer',
+        ]);
+        // broadcast the busLocationUpdateEvent
+        event(new BusLocationUpdateEvent($busLine->id, $request->get('bus_id'), $request->get('longitude'), $request->get('latitude')));
+
         return response()->json(null, 204);
     }
 }
