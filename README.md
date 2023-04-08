@@ -35,4 +35,4 @@
 
 ## Documentation
 All the projects REST routes are documented on the **api/documentation** page.
-All the projects Websocket routes are documented on the **asyncapi** page.
+All the projects Websocket routes are documented on the **async/documentation** page.
