@@ -497,6 +497,50 @@
                         "description": "Bus line not found"
                     }
                 }
+            },
+            "delete": {
+                "tags": [
+                    "Bus Lines"
+                ],
+                "summary": "Delete a bus line schedule",
+                "description": "Delete a specific bus line's schedule",
+                "operationId": "deleteBusLineSchedule",
+                "parameters": [
+                    {
+                        "name": "busLine",
+                        "in": "path",
+                        "description": "ID of the bus line whose schedule to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Bus line schedule deleted successfully"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthenticatedError"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Bus line not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             }
         },
         "/bus-lines/{busLine}/schedules": {
@@ -593,52 +637,6 @@
                                 }
                             }
                         }
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
-        "/api/bus-lines/{busLine}/schedule": {
-            "delete": {
-                "tags": [
-                    "Bus Lines"
-                ],
-                "summary": "Delete a bus line schedule",
-                "description": "Delete a specific bus line's schedule",
-                "operationId": "deleteBusLineSchedule",
-                "parameters": [
-                    {
-                        "name": "busLine",
-                        "in": "path",
-                        "description": "ID of the bus line whose schedule to delete",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64",
-                            "example": 1
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "Bus line schedule deleted successfully"
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/UnauthenticatedError"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Bus line not found"
                     }
                 },
                 "security": [

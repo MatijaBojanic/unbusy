@@ -1,0 +1,57 @@
+asyncapi: 2.6.0
+info:
+  title: Bus Location API
+  version: 1.0.0
+  description: This API provides real-time location updates for bus lines via WebSockets.
+servers:
+  local:
+    url: ws://localhost:6001/app/bus-location
+    protocol: ws
+channels:
+  public.bus-line.{busLineId}.location:
+    parameters:
+      busLineId:
+        description: The ID of the bus line.
+        schema:
+          type: integer
+    subscribe:
+      message:
+        $ref: '#/components/messages/BusLocationUpdateEvent'
+      bindings:
+        ws:
+          method: MESSAGE
+          query:
+            type: object
+            properties:
+              event:
+                type: string
+                const: pusher:subscribe
+              data:
+                type: object
+                properties:
+                  auth:
+                    type: string
+                    const: ""
+                  channel:
+                    type: string
+                    pattern: ^public\.bus-line\.[0-9]+\.location$
+components:
+  messages:
+    BusLocationUpdateEvent:
+      name: bus.location.updated
+      title: Bus location updated
+      contentType: application/json
+      payload:
+        type: object
+        properties:
+          bus_id:
+            type: integer
+            description: The unique identifier of the bus.
+          latitude:
+            type: number
+            format: float
+            description: The latitude of the bus's current location.
+          longitude:
+            type: number
+            format: float
+            description: The longitude of the bus's current location.

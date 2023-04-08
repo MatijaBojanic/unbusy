@@ -136,7 +136,7 @@ class BusScheduleController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/bus-lines/{busLine}/schedule",
+     *     path="/bus-lines/{busLine}/schedule",
      *     summary="Delete a bus line schedule",
      *     description="Delete a specific bus line's schedule",
      *     operationId="deleteBusLineSchedule",
