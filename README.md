@@ -34,4 +34,5 @@
     `./vendor/bin/sail artisan create:super-user {your email} {your password}`
 
 ## Documentation
-All the projects routes are documented on the **api/documentation** page.
+All the projects REST routes are documented on the **api/documentation** page.
+All the projects Websocket routes are documented on the **asyncapi** page.
